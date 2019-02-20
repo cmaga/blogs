@@ -1,15 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchUser } from '../actions';
 
 class UserHeader extends React.Component {
-    componentDidMount() {
-        this.props.fetchUser(this.props.userId);
-    }
 
     render() {
-        const user = this.props.users.find((user) => user.id === this.props.userId);//find built in
-
+        const { user } = this.props; //structure user out of this.props so we can use it as user
         if (!user) {
             return null;
         }
@@ -17,8 +12,9 @@ class UserHeader extends React.Component {
         return <div className="header">{user.name}</div>;
     }
 }
-
-const mapStateToProps = (state) => {
-   return {users: state.users};
+//ownProps is the props of the component or rather the props that are about to go in
+//mapstate to props should be for data selection logic
+const mapStateToProps = (state, ownProps) => {
+   return {user: state.users.find(user => user.id === ownProps.userId) };
 };
-export default connect(mapStateToProps, { fetchUser })(UserHeader);
+export default connect(mapStateToProps)(UserHeader);
